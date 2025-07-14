@@ -1,0 +1,58 @@
+{
+  "threads": [
+    {
+      "threadId": "1000001",
+      "opIp": "1",
+      "content": "Welcome to Board 1! This is the first thread. Introduce yourself!",
+      "imageUrl": "/files/bimgs/NVIDIA_Overlay_KZ1dXBm7Sh.png",
+      "imageAlt": "Board1 welcome image",
+      "createdAt": "2024-06-01T10:00:00Z",
+      "boardId": "1000000"
+    },
+    {
+      "threadId": "1000002",
+      "opIp": "2",
+      "content": "Share your favorite programming resources here!",
+      "imageUrl": "/files/bimgs/FEg6c0fXMAAifyi.jpg",
+      "imageAlt": "Resources image",
+      "createdAt": "2024-06-02T14:30:00Z",
+      "boardId": "1000000"
+    },
+    {
+      "threadId": "1000003",
+      "opIp": "3",
+      "content": "Random chat thread for Board 1. Anything goes!",
+      "imageUrl": "/files/bimgs/GTA_5V0bcAASpfh.jpg",
+      "imageAlt": "Random chat image",
+      "createdAt": "2024-06-03T09:15:00Z",
+      "boardId": "1000000"
+    },
+    {
+      "threadId": "2000001",
+      "opIp": "4",
+      "content": "Welcome to Board 2! Post your projects here.",
+      "imageUrl": "/files/bimgs/GauemyCaAAA9OdN.png",
+      "imageAlt": "Board2 welcome image",
+      "createdAt": "2024-06-04T16:45:00Z",
+      "boardId": "2000000"
+    },
+    {
+      "threadId": "2000002",
+      "opIp": "5",
+      "content": "Board 2: Tech news and discussions.",
+      "imageUrl": "/files/bimgs/Gs6ZJVRa8AAggnJ.jpg",
+      "imageAlt": "Tech news image",
+      "createdAt": "2024-06-05T11:20:00Z",
+      "boardId": "2000000"
+    },
+    {
+      "threadId": "2000003",
+      "opIp": "6",
+      "content": "Board 2: Show off your pets!",
+      "imageUrl": "/files/bimgs/photo_2025-05-13_19-11-11.jpg",
+      "imageAlt": "Pets image",
+      "createdAt": "2024-06-06T18:00:00Z",
+      "boardId": "2000000"
+    }
+  ]
+}

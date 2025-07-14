@@ -1,0 +1,93 @@
+.thread-flex-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.thread-main-content {
+  flex: 1 1 0;
+}
+
+.thread-sticky-form {
+  position: sticky;
+  top: 32px;
+  align-self: flex-start;
+  background: #333;
+  padding: 16px;
+  border-radius: 8px;
+  max-width: 350px;
+  min-width: 250px;
+  width: 100%;
+  z-index: 2;
+}
+
+.thread-reply {
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #333;
+  transition: box-shadow 0.2s;
+  max-width: 900px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.thread-reply:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.thread-image-container {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thread-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thread-content {
+  color: #f0f0f0;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.thread-id {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.thread-op {
+  padding: 24px 20px;
+  font-size: 1.08rem;
+  background: #393939;
+  border: 2px solid #222;
+  max-width: 1000px;
+  margin-bottom: 24px;
+  z-index: 1;
+}
+
+.thread-op .thread-id {
+  font-size: 1rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.thread-op .thread-id::after {
+  content: "OP";
+  margin-left: 10px;
+  color: #b7f1ff;
+}

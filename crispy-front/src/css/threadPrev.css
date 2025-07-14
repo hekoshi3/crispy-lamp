@@ -1,0 +1,103 @@
+/* src/css/threadPrev.css */
+
+.thread-preview {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #333;
+    transition: box-shadow 0.2s;
+    max-width: 1400px;
+    box-sizing: border-box;
+  }
+  
+  .thread-preview:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  
+  .thread-preview-content {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .thread-preview-image-container {
+    flex-shrink: 0;
+    width: 128px;
+    height: 128px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .thread-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .thread-preview-main {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .thread-preview-title {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #777;
+  }
+  
+  .thread-preview-text {
+    color: #f0f0f0;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .thread-preview-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: #888;
+  }
+  
+  .thread-preview-info .info-group {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .thread-preview-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .thread-preview-actions a,
+  .thread-preview-actions button {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  
+  .thread-preview-actions a {
+    background: #2563eb;
+    color: #fff;
+  }
+  
+  .thread-preview-actions a:hover {
+    background: #1741a6;
+  }
+  
+  .thread-preview-actions button {
+    background: #eee;
+    color: #333;
+  }
+  
+  .thread-preview-actions button:hover {
+    background: #ddd;
+  }

@@ -1,0 +1,86 @@
+html {
+    background-color: #222;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    width: 100%;
+}
+
+.mainpage {
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.mainpage h1 {
+    font-size: 2rem;
+    margin: 0px 10px 10px 10px;
+}
+
+.mainpage a::before {
+    content: "/";
+}
+
+.mainpage a {
+    color: #fff;
+    text-decoration: none;
+    margin: 10px;
+}
+
+.mainpage img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+}
+
+.boardpage {
+    color: #fff;
+    height: 100vh;
+    display: flex;
+}
+
+.boardpage main {
+    margin-left: 30vh;
+}
+.boardpage a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.boardpage .boardimg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+}
+
+.boardimg {
+    width: calc(1489px*0.4) !important;
+    height: calc(450px*0.4) !important;
+    object-fit: cover !important;
+    object-position: top !important;
+    display: block;
+    max-height: none;
+  }
+
+.boardname-top {
+  text-align: center;
+  width: 100%;
+  margin: 16px 0 16px 0;
+  font-size: 2rem; /* optional: makes it stand out */
+  font-weight: bold; /* optional: makes it stand out */
+}
+.boardname-top::before {
+    content: "/";
+}
+
+  
