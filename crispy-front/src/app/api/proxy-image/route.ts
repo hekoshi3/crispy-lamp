@@ -19,16 +19,14 @@ export async function GET(req: NextRequest) {
 
   try {
     const response = await fetch(backendUrl);
-    console.log("check")
     if (response.ok) {
-      console.log("ok")
       const arrayBuffer = await response.arrayBuffer();
       const contentType = response.headers.get('content-type') || 'image/png';
       return new Response(arrayBuffer, {
         headers: { 'Content-Type': contentType },
       });
     }
-  } catch (e) {
+  } catch {
     // fall through to default
   }
 

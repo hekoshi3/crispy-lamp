@@ -17,7 +17,7 @@ export default function Page() {
         setLoading(false);
       })
       .catch((err) => {
-        setError("Failed to load boards");
+        setError("Failed to load boards: "+err);
         setLoading(false);
       });
   }, []);

@@ -1,5 +1,7 @@
 const express = require('express');
 const Database = require('../utils/database');
+const logger = require('../utils/logger');
+const adminAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -7,13 +9,22 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { boardId } = req.query;
-    let threads = await Database.getThreads();
-    
-    if (boardId) {
-      threads = threads.filter(thread => thread.boardId === boardId);
-    }
-    
-    res.json({ threads });
+    console.log('GET /api/threads called with boardId:', boardId);
+    const threads = await Database.getThreads(boardId);
+    //console.log('DB returned threads:', threads);
+
+    // Map snake_case to camelCase
+    const mappedThreads = threads.map(t => ({
+      threadId: t.thread_id,
+      boardId: t.board_id,
+      content: t.content,
+      imageUrl: t.image_url,
+      imageAlt: t.image_alt,
+      opIp: t.op_ip,
+      createdAt: t.created_at,
+    }));
+
+    res.json({ threads: mappedThreads });
   } catch (error) {
     console.error('Error fetching threads:', error);
     res.status(500).json({ error: 'Failed to fetch threads' });
@@ -23,14 +34,24 @@ router.get('/', async (req, res) => {
 // GET single thread by ID
 router.get('/:id', async (req, res) => {
   try {
-    const threads = await Database.getThreads();
-    const thread = threads.find(t => t.threadId === req.params.id);
-    
+    const thread = await Database.getThreadById(req.params.id);
+
     if (!thread) {
       return res.status(404).json({ error: 'Thread not found' });
     }
-    
-    res.json({ thread });
+
+    // Map snake_case to camelCase
+    const mappedThread = {
+      threadId: thread.thread_id,
+      boardId: thread.board_id,
+      content: thread.content,
+      imageUrl: thread.image_url,
+      imageAlt: thread.image_alt,
+      opIp: thread.op_ip,
+      createdAt: thread.created_at,
+    };
+
+    res.json({ thread: mappedThread });
   } catch (error) {
     console.error('Error fetching thread:', error);
     res.status(500).json({ error: 'Failed to fetch thread' });
@@ -52,21 +73,19 @@ router.post('/', async (req, res) => {
     if (!board) {
       return res.status(400).json({ error: 'Board not found' });
     }
-    const prefix = board.prefix;
-    if (!prefix) {
-      return res.status(400).json({ error: 'Board prefix not set' });
-    }
+    const prefix = boardId.slice(0, 1); // or use board.prefix if you have it
 
-    // Generate threadId in range prefix000001–prefix999999
-    const threads = await Database.getThreads();
-    let maxId = prefix * 1000000;
-    threads.forEach(t => {
-      const idNum = parseInt(t.threadId, 10);
-      if (!isNaN(idNum) && Math.floor(idNum / 1000000) === prefix && idNum > maxId) {
-        maxId = idNum;
-      }
-    });
-    const nextThreadId = (maxId < (prefix + 1) * 1000000 - 1) ? (maxId + 1) : (prefix * 1000000 + 1);
+    // Find the max threadId for this board
+    const { rows } = await Database.pool.query(
+      'SELECT MAX(CAST(thread_id AS BIGINT)) AS max_id FROM threads WHERE board_id = $1',
+      [boardId]
+    );
+    let nextThreadId;
+    if (rows[0].max_id) {
+      nextThreadId = (BigInt(rows[0].max_id) + 1n).toString();
+    } else {
+      nextThreadId = (BigInt(boardId) + 1n).toString();
+    }
     
     const newThread = {
       threadId: String(nextThreadId),
@@ -92,7 +111,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update thread
-router.put('/:id', async (req, res) => {
+router.put('/:id', adminAuth, async (req, res) => {
   try {
     const { content, imageUrl, imageAlt } = req.body;
     
@@ -122,11 +141,12 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE thread
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminAuth, async (req, res) => {
   try {
     const success = await Database.deleteThread(req.params.id);
     
     if (success) {
+      logger.logModeration('DELETE_THREAD', `ThreadId: ${req.params.id}`);
       res.json({ message: 'Thread deleted successfully' });
     } else {
       res.status(404).json({ error: 'Thread not found' });

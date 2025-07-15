@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import "../../../../css/thread.css";
-import Board, { BoardImg } from "../page";
+import { BoardImg } from "../../../components/BoardImg";
 
 
 type Thread = {
@@ -122,7 +122,7 @@ export default function Page({ params }: { params: Promise<{ boardName: string; 
             // Refresh replies
             setReplies((prev) => [...prev, postData.post]);
         } catch (err) {
-            setPostError("Failed to create post");
+            setPostError("Failed to create post: "+err);
         } finally {
             setPosting(false);
         }

@@ -1,5 +1,7 @@
 const express = require('express');
 const Database = require('../utils/database');
+const logger = require('../utils/logger');
+const adminAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -7,13 +9,18 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { threadId } = req.query;
-    let posts = await Database.getPosts();
-    
-    if (threadId) {
-      posts = posts.filter(post => post.threadId === threadId);
-    }
-    
-    res.json({ posts });
+    const posts = await Database.getPosts(threadId);
+
+    // Map snake_case to camelCase
+    const mappedPosts = posts.map(p => ({
+      id: p.id,
+      threadId: p.thread_id,
+      content: p.content,
+      imageUrl: p.image_url,
+      createdAt: p.created_at,
+    }));
+
+    res.json({ posts: mappedPosts });
   } catch (error) {
     console.error('Error fetching posts:', error);
     res.status(500).json({ error: 'Failed to fetch posts' });
@@ -23,14 +30,22 @@ router.get('/', async (req, res) => {
 // GET single post by ID
 router.get('/:id', async (req, res) => {
   try {
-    const posts = await Database.getPosts();
-    const post = posts.find(p => p.id === req.params.id);
-    
+    const post = await Database.getPostById(req.params.id);
+
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    
-    res.json({ post });
+
+    // Map snake_case to camelCase
+    const mappedPost = {
+      id: post.id,
+      threadId: post.thread_id,
+      content: post.content,
+      imageUrl: post.image_url,
+      createdAt: post.created_at,
+    };
+
+    res.json({ post: mappedPost });
   } catch (error) {
     console.error('Error fetching post:', error);
     res.status(500).json({ error: 'Failed to fetch post' });
@@ -46,15 +61,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Thread ID and content are required' });
     }
     
-    // Verify thread exists
-    const threads = await Database.getThreads();
-    const thread = threads.find(t => t.threadId === threadId);
+    console.log('Creating post for threadId:', threadId);
+    const thread = await Database.getThreadById(threadId);
+    //console.log('Found thread:', thread);
     if (!thread) {
       return res.status(400).json({ error: 'Thread not found' });
     }
     // Find board for thread
     const boards = await Database.getBoards();
-    const board = boards.find(b => b.id === thread.boardId);
+    const board = boards.find(b => b.id === thread.board_id); // This is correct if both are strings and no mapping is needed
     if (!board) {
       return res.status(400).json({ error: 'Board not found for thread' });
     }
@@ -81,12 +96,16 @@ router.post('/', async (req, res) => {
       createdAt: new Date().toISOString()
     };
     
-    const success = await Database.addPost(newPost);
-    
-    if (success) {
-      res.status(201).json({ post: newPost });
-    } else {
-      res.status(500).json({ error: 'Failed to create post' });
+    try {
+      const success = await Database.addPost(newPost);
+      if (success) {
+        res.status(201).json({ post: newPost });
+      } else {
+        res.status(500).json({ error: 'Failed to create post' });
+      }
+    } catch (err) {
+      console.error('Error inserting post:', err);
+      res.status(500).json({ error: 'Failed to create post (exception)' });
     }
   } catch (error) {
     console.error('Error creating post:', error);
@@ -95,7 +114,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update post
-router.put('/:id', async (req, res) => {
+router.put('/:id',adminAuth, async (req, res) => {
   try {
     const { content, imageUrl } = req.body;
     
@@ -124,11 +143,11 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE post
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',adminAuth, async (req, res) => {
   try {
     const success = await Database.deletePost(req.params.id);
-    
     if (success) {
+      logger.logModeration('DELETE_POST', `PostId: ${req.params.id}`);
       res.json({ message: 'Post deleted successfully' });
     } else {
       res.status(404).json({ error: 'Post not found' });

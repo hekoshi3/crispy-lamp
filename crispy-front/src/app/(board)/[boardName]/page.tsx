@@ -1,21 +1,35 @@
 "use client"
 
-import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { ThreadPreview } from '../../components/threadPrev';
-import { findSourceMap } from "module";
 import { notFound } from "next/navigation";
+import { BoardImg } from "../../components/BoardImg";
 
-export default function Board({ params }: { params: Promise<{ boardName: string }> }) {
+type Board = {
+    id: string;
+    name: string;
+    // add other fields if needed
+};
+
+type Thread = {
+    threadId: string;
+    // add other fields if needed
+};
+
+type Post = {
+    threadId: string;
+    // add other fields if needed
+};
+
+export default function BoardPage({ params }: { params: Promise<{ boardName: string }> }) {
     const paramsObj = React.use(params);
     const boardName = paramsObj.boardName;
-    const [threads, setThreads] = useState([]);
-    const [posts, setPosts] = useState([]);
+    const [threads, setThreads] = useState<Thread[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [boardId, setBoardId] = useState<string | null>(null);
 
-    // Thread creation state
     const [content, setContent] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [imageAlt, setImageAlt] = useState("");
@@ -23,22 +37,19 @@ export default function Board({ params }: { params: Promise<{ boardName: string 
     const [createError, setCreateError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Fetch boardId, threads, and posts
     useEffect(() => {
         setLoading(true);
         setError(null);
         fetch("http://127.0.0.1:3001/api/boards")
             .then(res => res.json())
             .then(data => {
-                const board = (data.boards || []).find((b: any) => b.name === boardName);
+                const board = (data.boards || []).find((b: Board) => b.name === boardName);
                 if (board) {
                     setBoardId(board.id);
-                    // Fetch threads for this board
                     return fetch(`http://127.0.0.1:3001/api/threads?boardId=${board.id}`)
                         .then(res => res.json())
                         .then(threadData => {
                             setThreads(threadData.threads || []);
-                            // Fetch all posts (for replies count)
                             return fetch("http://127.0.0.1:3001/api/posts");
                         })
                         .then(res => res.json())
@@ -49,7 +60,7 @@ export default function Board({ params }: { params: Promise<{ boardName: string 
                 } else {
                     setError("Board not found");
                     setLoading(false);
-                    notFound()                    
+                    notFound()
                 }
             })
             .catch(() => {
@@ -59,7 +70,6 @@ export default function Board({ params }: { params: Promise<{ boardName: string 
             });
     }, [boardName]);
 
-    // Thread creation handler
     async function handleCreateThread(e: React.FormEvent) {
         e.preventDefault();
         setCreating(true);
@@ -117,89 +127,60 @@ export default function Board({ params }: { params: Promise<{ boardName: string 
             // Refresh threads
             setThreads((prev) => [threadData.thread, ...prev]);
         } catch (err) {
-            setCreateError("Failed to create thread");
+            setCreateError("Failed to create thread: " + err);
         } finally {
             setCreating(false);
         }
     }
-    if (error === null){
-    return (
-        <>
-            <title>{boardName}</title>
-            <div className="board">
-                <BoardImg boardName={boardName} />
-                {/* Thread creation form */}
-                <form onSubmit={handleCreateThread} style={{ marginBottom: 24, background: '#333', padding: 16, borderRadius: 8, maxWidth: 450 }}>
-                    <h2>Create a new thread</h2>
-                    <textarea
-                        value={content}
-                        onChange={e => setContent(e.target.value)}
-                        placeholder="Thread content..."
-                        rows={3}
-                        style={{ width: '100%', marginBottom: 8 }}
-                        required
-                    />
-                    <br />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        onChange={e => setImage(e.target.files?.[0] || null)}
-                        style={{ marginBottom: 8 }}
-                    />
-                    <br />
-                    <button type="submit" disabled={creating} style={{ padding: '8px 16px' }}>
-                        {creating ? "Creating..." : "Create Thread"}
-                    </button>
-                    {createError && <div style={{ color: 'red', marginTop: 8 }}>{createError}</div>}
-                </form>
-                <div className="threads-list">
-                    {loading && <p>Loading threads...</p>}
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {!loading && !error && threads.length > 0 ? (
-                        threads.map((thread: any) => {
-                            const repliesCount = posts.filter((post: any) => post.threadId === thread.threadId).length;
-                            return (
-                                <ThreadPreview
-                                    boardName={boardName}
-                                    key={thread.threadId}
-                                    {...thread}
-                                    replies={repliesCount < 0 ? 0 : repliesCount}
-                                />
-                            );
-                        })
-                    ) : (!loading && !error && <p>No threads yet for this board.</p>)}
+    if (error === null) {
+        return (
+            <>
+                <title>{boardName}</title>
+                <div className="board">
+                    <BoardImg boardName={boardName} />
+                    <form onSubmit={handleCreateThread} style={{ marginBottom: 24, background: '#333', padding: 16, borderRadius: 8, maxWidth: 450 }}>
+                        <h2>Create a new thread</h2>
+                        <textarea
+                            value={content}
+                            onChange={e => setContent(e.target.value)}
+                            placeholder="Thread content..."
+                            rows={3}
+                            style={{ width: '100%', marginBottom: 8 }}
+                            required
+                        />
+                        <br />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={e => setImage(e.target.files?.[0] || null)}
+                            style={{ marginBottom: 8 }}
+                        />
+                        <br />
+                        <button type="submit" disabled={creating} style={{ padding: '8px 16px' }}>
+                            {creating ? "Creating..." : "Create Thread"}
+                        </button>
+                        {createError && <div style={{ color: 'red', marginTop: 8 }}>{createError}</div>}
+                    </form>
+                    <div className="threads-list">
+                        {loading && <p>Loading threads...</p>}
+                        {error && <p style={{ color: 'red' }}>{error}</p>}
+                        {!loading && !error && threads.length > 0 ? (
+                            threads.map((thread: Thread) => {
+                                const repliesCount = posts.filter((post: Post) => post.threadId === thread.threadId).length;
+                                return (
+                                    <ThreadPreview
+                                        content={""} createdAt={""} boardName={boardName}
+                                        key={thread.threadId}
+                                        {...thread}
+                                        replies={repliesCount < 0 ? 0 : repliesCount}
+                                    />
+                                );
+                            })
+                        ) : (!loading && !error && <p>No threads yet for this board.</p>)}
+                    </div>
                 </div>
-            </div>
-        </>
-    );
-}else {return notFound()}
-}
-
-export function BoardImg({ boardName }: { boardName: string }) {
-    const [imgSrc, setImgSrc] = useState(`/images/boards/${boardName}.png`);
-    const [triedJpg, setTriedJpg] = useState(false);
-    return (
-        <>
-            <Image
-                    className="boardimg"
-                    src={imgSrc}
-                    alt="board"
-                    width={1489}
-                    height={450}
-                    priority
-                    style={{ objectFit: "cover", objectPosition: "top" }}
-                    onError={() => {
-                        if (!triedJpg) {
-                            setImgSrc(`/images/boards/${boardName}.jpg`);
-                            setTriedJpg(true);
-                        } else {
-                            setImgSrc("/images/logo.png");
-                        }
-                    }}
-                />                
-            <h1 className="boardname-top">{boardName}</h1>
-
-        </>
-    );
+            </>
+        );
+    } else { return notFound() }
 }

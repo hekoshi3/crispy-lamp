@@ -18,7 +18,7 @@ export default function Nav() {
                 setLoading(false);
             })
             .catch((err) => {
-                setError("Failed to load boards");
+                setError("Failed to load boards: " +err);
                 setLoading(false);
             });
     }, []);

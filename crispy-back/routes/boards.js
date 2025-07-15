@@ -1,6 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const Database = require('../utils/database');
+const adminAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create new board
-router.post('/', async (req, res) => {
+router.post('/', adminAuth, async (req, res) => {
   try {
     const { name } = req.body;
     
@@ -60,7 +61,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update board
-router.put('/:id', async (req, res) => {
+router.put('/:id',adminAuth, async (req, res) => {
   try {
     const { name } = req.body;
     
@@ -84,7 +85,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE board
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',adminAuth, async (req, res) => {
   try {
     const success = await Database.deleteBoard(req.params.id);
     

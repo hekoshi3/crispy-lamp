@@ -18,7 +18,6 @@ export function ThreadPreview({
   threadId,
   content,
   imageUrl,
-  imageAlt,
   replies,
   createdAt,
   boardName

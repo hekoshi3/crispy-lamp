@@ -135,15 +135,6 @@
       "createdAt": "2025-07-12T16:20:35.745Z"
     },
     {
-      "threadId": "2000005",
-      "boardId": "1000000",
-      "content": "What is your favorite programming language and why?",
-      "imageUrl": "http://127.0.0.1:3001/uploads/images/thread1.jpg",
-      "imageAlt": "Programming languages",
-      "opIp": "anonymous",
-      "createdAt": "2025-07-13T10:00:00.000Z"
-    },
-    {
       "threadId": "2000006",
       "boardId": "1000000",
       "content": "Share your best productivity tips for remote work.",
@@ -216,15 +207,6 @@
       "createdAt": "2025-07-13T11:20:00.000Z"
     },
     {
-      "threadId": "2000014",
-      "boardId": "1000000",
-      "content": "Ask anything about JavaScript frameworks.",
-      "imageUrl": "http://127.0.0.1:3001/uploads/images/thread10.jpg",
-      "imageAlt": "JavaScript frameworks",
-      "opIp": "anonymous",
-      "createdAt": "2025-07-13T11:30:00.000Z"
-    },
-    {
       "threadId": "2000015",
       "boardId": "1000000",
       "content": "Share your favorite code editor themes.",
@@ -277,6 +259,24 @@
       "imageAlt": null,
       "opIp": "anonymous",
       "createdAt": "2025-07-14T11:31:43.355Z"
+    },
+    {
+      "threadId": "1000006",
+      "boardId": "1000000",
+      "content": "kml;jkl;",
+      "imageUrl": null,
+      "imageAlt": null,
+      "opIp": "anonymous",
+      "createdAt": "2025-07-14T15:15:37.370Z"
+    },
+    {
+      "threadId": "1000007",
+      "boardId": "1000000",
+      "content": "hiiii hiiii helloooo hellooooooo heyyyyy",
+      "imageUrl": "http://127.0.0.1:3001/uploads/images/e0d8cd4b-df5d-4415-890d-d80403719b9b.jpg",
+      "imageAlt": null,
+      "opIp": "anonymous",
+      "createdAt": "2025-07-14T15:25:50.345Z"
     }
   ],
   "posts": [
@@ -484,6 +484,48 @@
       "content": "ого у меня тоже есть сгенерированные арты смотрите",
       "imageUrl": "http://127.0.0.1:3001/uploads/images/487364be-bf62-4558-8360-ba08f9b0f26f.jpg",
       "createdAt": "2025-07-14T11:41:53.609Z"
+    },
+    {
+      "id": "1000001",
+      "threadId": "1000006",
+      "content": "dobav kartinki blin",
+      "imageUrl": null,
+      "createdAt": "2025-07-14T15:15:48.193Z"
+    },
+    {
+      "id": "1000002",
+      "threadId": "1000006",
+      "content": "net",
+      "imageUrl": null,
+      "createdAt": "2025-07-14T15:15:53.419Z"
+    },
+    {
+      "id": "1000003",
+      "threadId": "1000006",
+      "content": "ladno togda ya",
+      "imageUrl": "http://127.0.0.1:3001/uploads/images/cba7be85-e5b5-4ef0-9a51-7442dc87d8bf.jpg",
+      "createdAt": "2025-07-14T15:16:45.495Z"
+    },
+    {
+      "id": "1000004",
+      "threadId": "1000006",
+      "content": "LMAO",
+      "imageUrl": null,
+      "createdAt": "2025-07-14T15:16:48.970Z"
+    },
+    {
+      "id": "1000005",
+      "threadId": "1000006",
+      "content": "bruh",
+      "imageUrl": null,
+      "createdAt": "2025-07-14T15:16:54.227Z"
+    },
+    {
+      "id": "1000006",
+      "threadId": "1000007",
+      "content": "hiiiii",
+      "imageUrl": null,
+      "createdAt": "2025-07-14T15:26:01.178Z"
     }
   ]
 }

@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function NotFound() {
   return (
     <div
@@ -10,7 +13,7 @@ export default function NotFound() {
         background: '#04070A',
       }}
     >
-      <img
+      <Image
         src="/images/default.png"
         alt="Not found"
         style={{
@@ -21,7 +24,7 @@ export default function NotFound() {
         }}
       />
       <h1 style={{ fontSize: '2rem', color: '#333', textAlign: 'center' }}>
-        Вы забрели в небытие. <a href="/">Вернитесь домой</a>
+        Вы забрели в небытие. <Link href="/">Вернитесь домой</Link>
       </h1>
     </div>
   );
