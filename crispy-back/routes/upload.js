@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs-extra');
 const { v4: uuidv4 } = require('uuid');
+const adminAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -33,10 +34,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// File size limit
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 10 * 1024 * 1024 // 5MB limit
   },
   fileFilter: fileFilter
 });
@@ -88,7 +90,7 @@ router.post('/images', upload.array('images', 5), (req, res) => {
 });
 
 // DELETE image
-router.delete('/image/:filename', async (req, res) => {
+router.delete('/image/:filename', adminAuth, async (req, res) => {
   try {
     const filename = req.params.filename;
     const filePath = path.join(__dirname, '../uploads/images', filename);

@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
 // POST create new board
 router.post('/', adminAuth, async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, prefix, dname } = req.body;
     
     if (!name || name.trim() === '') {
       return res.status(400).json({ error: 'Board name is required' });
@@ -44,7 +44,9 @@ router.post('/', adminAuth, async (req, res) => {
     
     const newBoard = {
       id: uuidv4(),
-      name: name.trim()
+      name: name.trim(),
+      prefix: Number(prefix),
+      displayName: dname.trim()
     };
     
     const success = await Database.addBoard(newBoard);

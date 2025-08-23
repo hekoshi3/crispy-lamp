@@ -1,6 +1,5 @@
 const { Pool } = require('pg');
 
-// Use environment variables for connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || undefined,
   user: process.env.PGUSER || 'postgres',
@@ -10,7 +9,6 @@ const pool = new Pool({
   port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432,
 });
 
-// Boards
 async function getBoards() {
   const { rows } = await pool.query('SELECT * FROM boards ORDER BY id');
   return rows;
@@ -44,7 +42,6 @@ async function deleteBoard(id) {
   return true;
 }
 
-// Threads
 async function getThreads(boardId) {
   if (boardId) {
     const { rows } = await pool.query('SELECT * FROM threads WHERE board_id = $1 ORDER BY created_at', [boardId]);
@@ -83,7 +80,6 @@ async function deleteThread(threadId) {
   return true;
 }
 
-// Posts
 async function getPosts(threadId) {
   if (threadId) {
     const { rows } = await pool.query('SELECT * FROM posts WHERE thread_id = $1 ORDER BY created_at', [threadId]);
