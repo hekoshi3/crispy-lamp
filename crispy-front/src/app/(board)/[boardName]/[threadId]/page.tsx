@@ -43,13 +43,13 @@ export default function Page({ params }: { params: Promise<{ boardName: string; 
         setLoading(true);
         setError(null);
         // Fetch thread
-        fetch(`http://127.0.0.1:3001/api/threads/${threadId}`)
+        fetch(`/api/proxy/threads/${threadId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.thread) {
                     setThread(data.thread);
                     // Fetch replies for this thread
-                    return fetch(`http://127.0.0.1:3001/api/posts?threadId=${threadId}`);
+                    return fetch(`/api/proxy/posts?threadId=${threadId}`);
                 } else {
                     setError("Thread not found");
                     setLoading(false);
@@ -85,7 +85,7 @@ export default function Page({ params }: { params: Promise<{ boardName: string; 
             if (postImage) {
                 const formData = new FormData();
                 formData.append("image", postImage);
-                const uploadRes = await fetch("http://127.0.0.1:3001/api/upload/image", {
+                const uploadRes = await fetch("/api/proxy/upload/image", {
                     method: "POST",
                     body: formData
                 });
@@ -95,10 +95,10 @@ export default function Page({ params }: { params: Promise<{ boardName: string; 
                     setPosting(false);
                     return;
                 }
-                uploadedImageUrl = `http://127.0.0.1:3001${uploadData.imageUrl}`;
+                uploadedImageUrl = `/api/proxy/images/${uploadData.imageUrl}`;
             }
             // Create post
-            const postRes = await fetch("http://127.0.0.1:3001/api/posts", {
+                const postRes = await fetch("/api/proxy/posts", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

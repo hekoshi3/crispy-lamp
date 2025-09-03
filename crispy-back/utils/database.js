@@ -5,7 +5,7 @@ const pool = new Pool({
   user: process.env.PGUSER || 'postgres',
   host: process.env.PGHOST || 'localhost',
   database: process.env.PGDATABASE || 'crispy-lamp',
-  password: process.env.PGPASSWORD || 'postgre',
+  password: process.env.PGPASSWORD || '5447812',
   port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432,
 });
 

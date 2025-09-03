@@ -16,6 +16,8 @@ export default function NotFound() {
       <Image
         src="/images/default.png"
         alt="Not found"
+        width={300}
+        height={300}
         style={{
           maxWidth: '300px',
           width: '100%',

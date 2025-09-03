@@ -40,17 +40,17 @@ export default function BoardPage({ params }: { params: Promise<{ boardName: str
     useEffect(() => {
         setLoading(true);
         setError(null);
-        fetch("http://127.0.0.1:3001/api/boards")
+        fetch('/api/proxy/boards')
             .then(res => res.json())
             .then(data => {
                 const board = (data.boards || []).find((b: Board) => b.name === boardName);
                 if (board) {
                     setBoardId(board.id);
-                    return fetch(`http://127.0.0.1:3001/api/threads?boardId=${board.id}`)
+                    return fetch(`/api/proxy/threads?boardId=${board.id}`)
                         .then(res => res.json())
                         .then(threadData => {
                             setThreads(threadData.threads || []);
-                            return fetch("http://127.0.0.1:3001/api/posts");
+                            return fetch("/api/proxy/threads");
                         })
                         .then(res => res.json())
                         .then(postData => {
@@ -90,7 +90,7 @@ export default function BoardPage({ params }: { params: Promise<{ boardName: str
             if (image) {
                 const formData = new FormData();
                 formData.append("image", image);
-                const uploadRes = await fetch("http://127.0.0.1:3001/api/upload/image", {
+                const uploadRes = await fetch("/api/proxy/upload/image", {
                     method: "POST",
                     body: formData
                 });
@@ -100,10 +100,10 @@ export default function BoardPage({ params }: { params: Promise<{ boardName: str
                     setCreating(false);
                     return;
                 }
-                uploadedImageUrl = `http://127.0.0.1:3001${uploadData.imageUrl}`;
+                uploadedImageUrl = `/api/proxy/images/${uploadData.imageUrl}`;
             }
             // Create thread
-            const threadRes = await fetch("http://127.0.0.1:3001/api/threads", {
+            const threadRes = await fetch("/api/proxy/threads", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

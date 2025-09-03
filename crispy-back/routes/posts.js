@@ -52,7 +52,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST create new post
 router.post('/', async (req, res) => {
   try {
     const { threadId, content, imageUrl } = req.body;
@@ -63,20 +62,23 @@ router.post('/', async (req, res) => {
     
     console.log('Creating post for threadId:', threadId);
     const thread = await Database.getThreadById(threadId);
-    //console.log('Found thread:', thread);
+    
     if (!thread) {
       return res.status(400).json({ error: 'Thread not found' });
     }
+    
     // Find board for thread
     const boards = await Database.getBoards();
-    const board = boards.find(b => b.id === thread.board_id); // This is correct if both are strings and no mapping is needed
+    const board = boards.find(b => b.id === thread.board_id);
     if (!board) {
       return res.status(400).json({ error: 'Board not found for thread' });
     }
+    
     const prefix = board.prefix;
     if (!prefix) {
       return res.status(400).json({ error: 'Board prefix not set' });
     }
+    
     // Generate post ID: prefixXXXXXX
     const posts = await Database.getPosts();
     let maxId = prefix * 1000000;
@@ -96,20 +98,20 @@ router.post('/', async (req, res) => {
       createdAt: new Date().toISOString()
     };
     
-    try {
-      const success = await Database.addPost(newPost);
-      if (success) {
-        res.status(201).json({ post: newPost });
-      } else {
-        res.status(500).json({ error: 'Failed to create post' });
-      }
-    } catch (err) {
-      console.error('Error inserting post:', err);
-      res.status(500).json({ error: 'Failed to create post (exception)' });
+    console.log('Attempting to create post:', newPost);
+    
+    const success = await Database.addPost(newPost);
+    if (success) {
+      console.log('Post created successfully:', newPost);
+      return res.status(201).json({ post: newPost });
+    } else {
+      console.error('Database.addPost returned false');
+      return res.status(500).json({ error: 'Failed to create post' });
     }
+    
   } catch (error) {
     console.error('Error creating post:', error);
-    res.status(500).json({ error: 'Failed to create post' });
+    return res.status(500).json({ error: 'Failed to create post: ' + error.message });
   }
 });
 
